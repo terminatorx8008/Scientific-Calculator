@@ -146,22 +146,26 @@
                               <Component id="cos" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="one" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="two" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="three" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="minus" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="tan" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="percentage" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="two" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="three" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="minus" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="tan" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="percentage" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="clear" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="zero" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="decimal" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="plus" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="underRoot" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="pie" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="zero" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="decimal" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="plus" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="underRoot" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <Component id="pie" alignment="3" min="-2" pref="80" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
