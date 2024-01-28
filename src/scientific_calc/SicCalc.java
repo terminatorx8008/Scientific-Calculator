@@ -30,21 +30,49 @@ public class SicCalc extends javax.swing.JFrame {
     }
 
     private void processOperator(char operator) {
-        db = valueStack.pop();
-        da = valueStack.pop();
-        if (operator == '+') {
-            dc = da + db;
-        } else if (operator == '-') {
-            dc = da - db;
-        } else if (operator == '*') {
-            dc = da * db;
-        } else if (operator == '/') {
+        if (!valueStack.isEmpty()) {
+            db = valueStack.pop();
+            System.out.println(db);
+
+        } else {
+            return;  // Exit the method if there's an error
+        }
+
+        if (!valueStack.isEmpty()) {
+            System.out.println(da);
+            da = valueStack.pop();
+        } else {
+            return;  // Exit the method if there's an error
+        }
+
+        switch (operator) {
+            case '+':
+                dc = da + db;
+                System.out.println(da + " " + operator + " " + db + " = " + dc);
+                break;
+            case '-':
+                dc = da - db;
+                System.out.println(da + " " + operator + " " + db + " = " + dc);
+
+                break;
+            case '*':
+                dc = da * db;
+                System.out.println(da + " " + operator + " " + db + " = " + dc);
+                break;
+            case '/':
             try {
                 dc = da / db;
+                System.out.println(da + " " + operator + " " + db + " = " + dc);
             } catch (ArithmeticException e) {
-                System.out.println(e);
+                return;  // Exit the method if there's an error
             }
+            break;
+            default:
+                System.out.println("Error: Unknown operator");
+                error = true;
+                return;  // Exit the method if there's an error
         }
+
         valueStack.push(dc);
     }
 
@@ -474,21 +502,23 @@ public class SicCalc extends javax.swing.JFrame {
                             .addComponent(power, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cos, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(one, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(two, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(three, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(minus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(percentage, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(two, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(three, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(minus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(percentage, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(zero, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(decimal, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(plus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(underRoot, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pie, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(zero, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(decimal, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(plus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(underRoot, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pie, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(plusMinus, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -513,17 +543,27 @@ public class SicCalc extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void closingBracketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closingBracketActionPerformed
+        da = Double.parseDouble(display.getText());
         display.setText("");
-        while (!operatorStack.empty() && isOperator(operatorStack.peek())) {
-            char toProcess = operatorStack.peek();
-            operatorStack.pop();
+        valueStack.push(da);
+
+        // Process operators and operands until an opening bracket is found
+        while (!operatorStack.isEmpty() && operatorStack.peek() != '(') {
+            char toProcess = operatorStack.pop();
             processOperator(toProcess);
         }
-        if (!operatorStack.empty() && operatorStack.peek() == '(') {
-            operatorStack.pop();
+
+        // Check if an opening bracket is found
+        if (!operatorStack.isEmpty() && operatorStack.peek() == '(') {
+            operatorStack.pop(); // Pop the opening bracket
         } else {
-            System.out.println("Error: unbalanced parenthesis.");
-            error = true;
+            return; // Exit the method if there's an error
+        }
+
+        // Continue processing operators if there are more
+        while (!operatorStack.isEmpty() && isOperator(operatorStack.peek())) {
+            char toProcess = operatorStack.pop();
+            processOperator(toProcess);
         }
     }//GEN-LAST:event_closingBracketActionPerformed
 
@@ -535,10 +575,17 @@ public class SicCalc extends javax.swing.JFrame {
     private void equalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_equalActionPerformed
         if (powerClicked) {
             db = Double.parseDouble(display.getText());
-            display.setText(String.valueOf(Math.pow(da, db)));
+            dc = Math.pow(da, db);
+            if (decimalClicked) {
+                display.setText(String.valueOf(dc));
+            } else {
+                display.setText(String.valueOf((int) Math.round(Math.pow(da, db))));
+            }
         } else {
-            da = Double.parseDouble(display.getText());
-            valueStack.push(da);
+            if (!display.getText().isEmpty()) {
+                da = Double.parseDouble(display.getText());
+                valueStack.push(da);
+            }
             decimalClicked = false;
             while (!operatorStack.empty() && isOperator(operatorStack.peek())) {
                 char toProcess = operatorStack.peek();
@@ -588,19 +635,19 @@ public class SicCalc extends javax.swing.JFrame {
 
     private void cosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cosActionPerformed
         da = Double.parseDouble(display.getText());
-        da=Math.toRadians(da);
+        da = Math.toRadians(da);
         display.setText(String.valueOf(Math.cos(da)));
     }//GEN-LAST:event_cosActionPerformed
 
     private void tanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tanActionPerformed
         da = Double.parseDouble(display.getText());
-        da=Math.toRadians(da);
+        da = Math.toRadians(da);
         display.setText(String.valueOf(Math.tan(da)));
     }//GEN-LAST:event_tanActionPerformed
 
     private void sinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sinActionPerformed
         da = Double.parseDouble(display.getText());
-        da=Math.toRadians(da);
+        da = Math.toRadians(da);
         display.setText(String.valueOf(Math.sin(da)));
     }//GEN-LAST:event_sinActionPerformed
 
@@ -611,9 +658,11 @@ public class SicCalc extends javax.swing.JFrame {
 
     private void minusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minusActionPerformed
         if (displayFilled) {
+        if (!display.getText().isEmpty()) {
             da = Double.parseDouble(display.getText());
             display.setText("");
             valueStack.push(da);
+        }
             if (operatorStack.empty() || getPrecedence('-') > getPrecedence(operatorStack.peek())) {
                 operatorStack.push('-');
             } else {
@@ -630,9 +679,12 @@ public class SicCalc extends javax.swing.JFrame {
     }//GEN-LAST:event_minusActionPerformed
 
     private void plusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plusActionPerformed
-        da = Double.parseDouble(display.getText());
-        display.setText("");
-        valueStack.push(da);
+        if (!display.getText().isEmpty()) {
+            da = Double.parseDouble(display.getText());
+            display.setText("");
+            valueStack.push(da);
+        }
+
         if (operatorStack.empty() || getPrecedence('+') > getPrecedence(operatorStack.peek())) {
             operatorStack.push('+');
         } else {
@@ -646,9 +698,11 @@ public class SicCalc extends javax.swing.JFrame {
     }//GEN-LAST:event_plusActionPerformed
 
     private void multiplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiplyActionPerformed
-        da = Double.parseDouble(display.getText());
-        display.setText("");
-        valueStack.push(da);
+        if (!display.getText().isEmpty()) {
+            da = Double.parseDouble(display.getText());
+            display.setText("");
+            valueStack.push(da);
+        }
         if (operatorStack.empty() || getPrecedence('*') > getPrecedence(operatorStack.peek())) {
             operatorStack.push('*');
         } else {
@@ -662,9 +716,11 @@ public class SicCalc extends javax.swing.JFrame {
     }//GEN-LAST:event_multiplyActionPerformed
 
     private void divideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_divideActionPerformed
-        da = Double.parseDouble(display.getText());
-        display.setText("");
-        valueStack.push(da);
+        if (!display.getText().isEmpty()) {
+            da = Double.parseDouble(display.getText());
+            display.setText("");
+            valueStack.push(da);
+        }
         if (operatorStack.empty() || getPrecedence('/') > getPrecedence(operatorStack.peek())) {
             operatorStack.push('/');
         } else {
